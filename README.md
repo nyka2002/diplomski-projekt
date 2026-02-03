@@ -20,15 +20,12 @@ An AI-powered web application that aggregates real estate listings from multiple
 - **Scraping**: Playwright (runs on Railway worker)
 - **Cache/Queue**: Redis (Upstash) with BullMQ
 - **Monitoring**: Sentry, Vercel Analytics
-- **Deployment**: Vercel (app) + Railway (worker)
 
 ## Prerequisites
 
 - Node.js 18+ and npm
 - Supabase account
 - OpenAI API key
-- Upstash Redis account (production)
-- Railway account (for worker)
 
 ## Quick Start
 
@@ -93,73 +90,6 @@ An AI-powered web application that aggregates real estate listings from multiple
 | `npm run worker:scrape` | Run scraping worker locally |
 | `npm run test` | Run all tests |
 | `npm run test:e2e` | Run E2E tests |
-
-## Deployment
-
-### Quick Deploy
-
-1. **Vercel** (Frontend + API):
-   - Connect your GitHub repo to Vercel
-   - Configure environment variables
-   - Deploy
-
-2. **Railway** (Scraping Worker):
-   - Connect your repo to Railway
-   - Use `worker/Dockerfile`
-   - Configure environment variables
-   - Deploy
-
-See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for detailed instructions.
-
-### Environment Variables
-
-Key variables needed for production:
-
-```env
-# Supabase
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
-SUPABASE_SERVICE_ROLE_KEY=
-
-# OpenAI
-OPENAI_API_KEY=
-
-# Redis (Upstash)
-REDIS_URL=
-UPSTASH_REDIS_REST_URL=
-UPSTASH_REDIS_REST_TOKEN=
-
-# Application
-NEXT_PUBLIC_APP_URL=
-ADMIN_API_KEY=
-CRON_SECRET=
-```
-
-## Documentation
-
-- [Deployment Guide](docs/DEPLOYMENT.md) - Production deployment instructions
-- [API Reference](docs/API.md) - API endpoints documentation
-- [Scraper Guide](docs/SCRAPER.md) - Web scraping system documentation
-- [Service Setup](SETUP_SERVICES.md) - External services configuration
-
-## Architecture
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                         VERCEL                               │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐       │
-│  │   Next.js    │  │   API Routes │  │ Vercel Cron  │       │
-│  │   Frontend   │  │   /api/*     │  │ (triggers)   │       │
-│  └──────────────┘  └──────────────┘  └──────────────┘       │
-└─────────────────────────────────────────────────────────────┘
-           │                  │                 │
-           ▼                  ▼                 ▼
-┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐
-│     Supabase     │  │  Upstash Redis   │  │     Railway      │
-│  PostgreSQL +    │  │  Cache + Queue   │  │  Scrape Worker   │
-│  pgvector + Auth │  │                  │  │  (Playwright)    │
-└──────────────────┘  └──────────────────┘  └──────────────────┘
-```
 
 ## Current Status
 
