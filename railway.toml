@@ -1,0 +1,23 @@
+# Railway configuration for the scraping worker
+# This file tells Railway how to build and deploy the worker
+
+[build]
+# Use the Dockerfile for building
+builder = "dockerfile"
+dockerfilePath = "worker/Dockerfile"
+
+[deploy]
+# Number of instances to run
+numReplicas = 1
+
+# Restart policy
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 5
+
+# Health check
+healthcheckPath = "/"
+healthcheckTimeout = 10
+
+# Resources (adjust based on your plan)
+# memory = "512Mi"
+# cpu = "0.5"
